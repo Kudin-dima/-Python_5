@@ -1,16 +1,19 @@
+import numpy as np
 import matplotlib.pyplot as plt
-import neurolab as nl
+import pandas as pd
 
-input = [[0, 0], [0, 1], [1, 0], [1, 1]]
-target = [[0], [0], [0], [1]]
+def read_data(input_file):
+    input_data = np.loadtxt(input_file, delimiter = None)
+    
+dates = pd.date_range('1950-01', periods = input_data.shape[0], freq = 'M')
 
-net = nl.net.newp([[0,1], [0,1],], 1)
+output = pd.Series(input_data[:, dates], index = dates)
+    return output
+if __name__=='__main__':
 
-error_progress = net.train(input, target, epochs=100, show=10, lr=0.1)
+input_file = "/Users/79151/Downloads/ao.txt"
+timeseries = read_data(input_file)
 
 plt.figure()
-plt.plot(error_progress)
-plt.xlabel('Number of epochs')
-plt.ylabel('Training error')
-plt.grid()
+timeseries.plot()
 plt.show()
